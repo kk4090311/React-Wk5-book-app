@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { NavigationContainer, useTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator, useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
@@ -10,7 +10,7 @@ import {
 } from '@react-navigation/drawer';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { Divider, Image, Input, HStack, Text ,Box} from 'native-base';
+import { Divider, Image, Input, HStack, Text ,Box ,Pressable} from 'native-base';
 
 import AlbumScreen from '../screens/AlbumScreen';
 import DetailScreen from '../screens/DetailScreen';
@@ -31,6 +31,12 @@ const Navigation = () => {
     </NavigationContainer>
   );
 }
+
+
+
+
+
+
 
 const CustomDrawerContent = (props) => {
   const { colors } = useTheme();
@@ -151,7 +157,7 @@ const MyTabs = () => {
         component={SettingsStack}
         options={{
           headerShown: false,
-          title: "Wishlist",
+          title: "My Books",
           headerTitleStyle: {
             fontWeight: '400',
             fontSize: 12
@@ -202,7 +208,17 @@ const SettingsStack = ({ navigation }) => {
   );
 }
 
+
+
+
+
 const HomeStack = ({ navigation }) => {
+
+  const [toggle,settoggle]= useState(true);
+  const togglefun=() =>{
+    settoggle(!toggle);
+  }
+
 
   return (
     <Stack.Navigator
@@ -214,7 +230,7 @@ const HomeStack = ({ navigation }) => {
         name="c1"
         component={AlbumScreen}
         options={{
-          title: albumData.albumTitle,
+          title: '',
           headerTitleStyle: {
             fontWeight: '400',
             fontSize: 20
@@ -227,13 +243,19 @@ const HomeStack = ({ navigation }) => {
               style={{ marginRight: 20 }}
             />
           ),
+          headerRight: () => (
+            <MaterialCommunityIcons
+              name={'magnify'}
+              size={24}
+            />
+          ),
         }}
       />
       <Stack.Screen
         name="Detail"
         component={DetailScreen}
         options={({ route }) => ({
-          title: route.params.title,
+          title: '',
           headerStyle: {
             backgroundColor: '#fff',
           },
@@ -242,6 +264,24 @@ const HomeStack = ({ navigation }) => {
             fontWeight: '400',
             fontSize: 20
           },
+        
+          headerRight: () => (
+            <Pressable onPress={()=>togglefun()}>
+            {toggle? <MaterialCommunityIcons
+            name={'bookmark'}
+            size={24}
+            color="#6200EE"/>
+            :
+            <MaterialCommunityIcons
+            name={'bookmark-outline'}
+            size={24}
+            color="#000000"/>
+            }
+
+             
+          </Pressable>
+            
+          ),
         })}
       />
     </Stack.Navigator>
